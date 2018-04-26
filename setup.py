@@ -9,10 +9,6 @@ import setuptools
 from setuptools.command.test import test as TestCommand
 from setuptools import setup
 
-if sys.version_info < (3, 4, 0):
-    sys.stderr.write('FATAL: AWS SAML Login needs to be run with Python 3.4+\n')
-    sys.exit(1)
-
 __location__ = os.path.join(os.getcwd(), os.path.dirname(inspect.getfile(inspect.currentframe())))
 
 
@@ -97,7 +93,7 @@ def get_install_requirements(path):
 
 
 def read(fname):
-    return open(os.path.join(__location__, fname), encoding='utf-8').read()
+    return open(os.path.join(__location__, fname)).read()
 
 
 def check_deps(deps):

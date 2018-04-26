@@ -10,6 +10,10 @@ import requests
 AWS_CREDENTIALS_PATH = '~/.aws/credentials'
 OPENAM_SEARCH_STRING = 'XUI/#login/&'
 
+try:
+  from pathlib import Path
+except ImportError:
+  from pathlib2 import Path  # python 2 backport
 
 def get_boto3_session(key_id, secret, session_token=None, region=None, profile=None):
     """
@@ -31,7 +35,7 @@ def get_boto3_session(key_id, secret, session_token=None, region=None, profile=N
 
 def write_aws_credentials(profile, key_id, secret, session_token=None):
     credentials_path = os.path.expanduser(AWS_CREDENTIALS_PATH)
-    os.makedirs(os.path.dirname(credentials_path), exist_ok=True)
+    Path(os.path.dirname(credentials_path)).mkdir(exist_ok=True)
     config = configparser.ConfigParser()
     if os.path.exists(credentials_path):
         config.read(credentials_path)
@@ -48,7 +52,7 @@ def write_aws_credentials(profile, key_id, secret, session_token=None):
         config.write(fd)
 
 
-def get_saml_response(html: str):
+def get_saml_response(html):
     """
     Parse SAMLResponse from Shibboleth page
 
@@ -65,7 +69,7 @@ def get_saml_response(html: str):
         return xml
 
 
-def get_form_action(html: str):
+def get_form_action(html):
     '''
     >>> get_form_action('<body><form action="test"></form></body>')
     'test'
@@ -74,7 +78,7 @@ def get_form_action(html: str):
     return soup.find('form').get('action')
 
 
-def get_account_name(role_arn: str, account_names: dict):
+def get_account_name(role_arn, account_names):
     '''
     >>> get_account_name('arn:aws:iam::123:role/Admin', {'123': 'blub'})
     'blub'
@@ -86,7 +90,7 @@ def get_account_name(role_arn: str, account_names: dict):
         return account_names.get(number)
 
 
-def get_roles(saml_xml: str) -> list:
+def get_roles(saml_xml):
     """
     Extract SAML roles from SAML assertion XML
 
@@ -110,7 +114,7 @@ def get_roles(saml_xml: str) -> list:
     return roles
 
 
-def get_account_names(html: str) -> dict:
+def get_account_names(html):
     '''
     Parse account names from AWS page
 
