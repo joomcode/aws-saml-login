@@ -228,14 +228,15 @@ def authenticate(url, user, password):
     return saml_xml, roles
 
 
-def assume_role(saml_xml, provider_arn, role_arn):
+def assume_role(saml_xml, provider_arn, role_arn, **kwargs):
     saml_assertion = codecs.encode(saml_xml.encode('utf-8'), 'base64').decode('ascii').replace('\n', '')
 
     try:
         sts = boto3.client('sts')
         response_data = sts.assume_role_with_saml(RoleArn=role_arn,
                                                   PrincipalArn=provider_arn,
-                                                  SAMLAssertion=saml_assertion)
+                                                  SAMLAssertion=saml_assertion,
+                                                  **kwargs)
     except Exception as e:
         raise AssumeRoleFailed(str(e))
 
