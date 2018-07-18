@@ -118,6 +118,9 @@ def setup_package():
 
     install_reqs = get_install_requirements('requirements.txt')
 
+    if sys.version_info < (3,):
+        install_reqs.append('pathlib2')
+
     # check_deps(install_reqs)
 
     command_options = {'test': {'test_suite': ('setup.py', 'tests'), 'cov': ('setup.py', MAIN_PACKAGE)}}
