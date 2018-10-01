@@ -35,7 +35,11 @@ def get_boto3_session(key_id, secret, session_token=None, region=None, profile=N
 
 def write_aws_credentials(profile, key_id, secret, session_token=None):
     credentials_path = os.path.expanduser(AWS_CREDENTIALS_PATH)
-    Path(os.path.dirname(credentials_path)).mkdir(exist_ok=True)
+    try:
+        Path(os.path.dirname(credentials_path)).mkdir(exist_ok=True)
+    except TypeError:
+        from pathlib2 import Path #python < 3.5 workaround
+        Path(os.path.dirname(credentials_path)).mkdir(exist_ok=True)
     config = configparser.ConfigParser()
     if os.path.exists(credentials_path):
         config.read(credentials_path)
