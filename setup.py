@@ -118,7 +118,7 @@ def setup_package():
 
     install_reqs = get_install_requirements('requirements.txt')
 
-    if sys.version_info < (3,):
+    if sys.version_info < (3, 5):
         install_reqs.append('pathlib2')
 
     # check_deps(install_reqs)
