@@ -10,11 +10,6 @@ import requests
 AWS_CREDENTIALS_PATH = '~/.aws/credentials'
 OPENAM_SEARCH_STRING = 'XUI/#login/&'
 
-try:
-  from pathlib import Path
-except ImportError:
-  from pathlib2 import Path  # python 2 backport
-
 def get_boto3_session(key_id, secret, session_token=None, region=None, profile=None):
     """
     get boto3 session for giving keys
@@ -34,6 +29,10 @@ def get_boto3_session(key_id, secret, session_token=None, region=None, profile=N
 
 
 def write_aws_credentials(profile, key_id, secret, session_token=None):
+    try:
+        from pathlib import Path
+    except ImportError:
+        from pathlib2 import Path  # python 2 backport
     credentials_path = os.path.expanduser(AWS_CREDENTIALS_PATH)
     try:
         Path(os.path.dirname(credentials_path)).mkdir(exist_ok=True)
