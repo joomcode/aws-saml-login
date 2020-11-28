@@ -90,7 +90,7 @@ def get_account_name(role_arn, account_names):
     '''
     number = role_arn.split(':')[4]
     if account_names:
-        return account_names.get(number)
+        return account_names.get(number, number)
 
 
 def get_roles(saml_xml):
